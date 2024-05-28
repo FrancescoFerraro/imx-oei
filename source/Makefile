@@ -14,7 +14,8 @@ ifeq ($(DEBUG), 1)
 OBJS += \
 	$(OUT)/pinmux.o \
 	$(OUT)/tiny-printf.o \
-	$(OUT)/lpuart.o
+	$(OUT)/lpuart.o \
+	$(OUT)/lpi2c.o
 endif
 
 INCLUDE += -Iinclude

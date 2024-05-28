@@ -4,12 +4,20 @@
  */
 #include "ddr.h"
 #include <asm/arch/clock.h>
+#include "asm/arch/soc_memory_map.h"
 #include <time.h>
 #include "oei.h"
 #include "debug.h"
 #include "lpuart.h"
+#include "lpi2c.h"
 #include "pinmux.h"
 #include "build_info.h"
+
+static struct lpi2c_bus lpi2c1 = {
+	.index = 1,
+	.base = (void *)LPI2C1_RBASE,
+	.speed = 100000,
+};
 
 #ifdef  DDR_MEM_TEST
 #define DDR_MEM_BASE	0x80000000
@@ -47,6 +55,7 @@ uint32_t __attribute__((section(".entry"))) oei_entry(void)
 	clock_init();
 	pinmux_config();
 	lpuart32_serial_init();
+	lpi2c_probe_chip(&lpi2c1, 0x52, 0);
 
 #ifdef	CONFIG_DDR_QBOOT
 	printf("\n\n** DDR OEI: QuickBoot, commit: %08x **\n", OEI_COMMIT);
