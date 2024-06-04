@@ -370,6 +370,7 @@ int lpi2c_probe_chip(struct lpi2c_bus *i2c_bus, u32 chip, u32 chip_flags)
 {
 	lpi2c_status_t result;
 
+	bus_i2c_init(i2c_bus, i2c_bus->speed);
 	result = bus_i2c_start(i2c_bus, chip, 0);
 	if (result) {
 		bus_i2c_stop(i2c_bus);
