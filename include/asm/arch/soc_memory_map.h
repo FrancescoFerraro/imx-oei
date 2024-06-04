@@ -91,6 +91,12 @@
 #define LPWDOG1_NS_RBASE            APIS1_IPS_NS_SLOT_ADDR(((uint32_t)45))
 #define LPWDOG1_RBASE               APIS1_IPS_SLOT_ADDR(((uint32_t)45))
 
+#define LPI2C1_NS_RBASE             APIS1_IPS_NS_SLOT_ADDR(((uint32_t)52))
+#define LPI2C1_RBASE                APIS1_IPS_SLOT_ADDR(((uint32_t)52))
+
+#define LPI2C2_NS_RBASE             APIS1_IPS_NS_SLOT_ADDR(((uint32_t)53))
+#define LPI2C2_RBASE                APIS1_IPS_SLOT_ADDR(((uint32_t)53))
+
 #define LPSPI1_NS_RBASE             APIS1_IPS_NS_SLOT_ADDR(((uint32_t)54))
 #define LPSPI1_RBASE                APIS1_IPS_SLOT_ADDR(((uint32_t)54))
 
@@ -102,9 +108,6 @@
 
 #define LPUART2_NS_RBASE            APIS1_IPS_NS_SLOT_ADDR(((uint32_t)57))
 #define LPUART2_RBASE               APIS1_IPS_SLOT_ADDR(((uint32_t)57))
-
-#define LPI2C1_NS_RBASE             APIS1_IPS_NS_SLOT_ADDR(((uint32_t)58))
-#define LPI2C1_RBASE                APIS1_IPS_SLOT_ADDR(((uint32_t)58))
 
 #define IOMUXC_NS_RBASE             APIS1_IPS_NS_SLOT_ADDR(((uint32_t)60))
 #define IOMUXC_RBASE                APIS1_IPS_SLOT_ADDR(((uint32_t)60))
