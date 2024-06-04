@@ -266,7 +266,6 @@ static int bus_i2c_write(struct lpi2c_bus *i2c_bus, u32 chip, u8 *buf, int len)
 	return result;
 }
 
-#ifdef PORT_SET_BUS_SPEED
 static int bus_i2c_set_bus_speed(struct lpi2c_bus *i2c_bus, int speed)
 {
 	struct lpi2c_reg *regs = (struct lpi2c_reg *)(i2c_bus->base);
@@ -276,19 +275,9 @@ static int bus_i2c_set_bus_speed(struct lpi2c_bus *i2c_bus, int speed)
 	u32 error = 0xffffffff;
 	u32 clock_rate;
 	bool mode;
-	int i;
+	u32 i;
 
-	if (CONFIG_IS_ENABLED(CLK)) {
-		clock_rate = clk_get_rate(&i2c_bus->per_clk);
-		if (clock_rate <= 0) {
-			dev_err(bus, "Failed to get i2c clk: %d\n", clock_rate);
-			return clock_rate;
-		}
-	} else {
-		clock_rate = get_i2cclk(dev_seq(bus));
-		if (!clock_rate)
-			return -EPERM;
-	}
+	clock_rate = MHZ(24);
 
 	mode = (readl(&regs->mcr) & LPI2C_MCR_MEN_MASK) >> LPI2C_MCR_MEN_SHIFT;
 	/* disable master mode */
@@ -303,7 +292,7 @@ static int bus_i2c_set_bus_speed(struct lpi2c_bus *i2c_bus, int speed)
 			else
 				rate = (clock_rate / preescale / (3 * clkhi + 2 + 2 / preescale));
 
-			abs_error = speed > rate ? speed - rate : rate - speed;
+			abs_error = (u32)speed > rate ? (u32)speed - rate : rate - (u32)speed;
 
 			if (abs_error < error) {
 				best_pre = preescale;
@@ -325,7 +314,7 @@ static int bus_i2c_set_bus_speed(struct lpi2c_bus *i2c_bus, int speed)
 	writel(val, &regs->mccr0);
 
 	for (i = 0; i < 8; i++) {
-		if (best_pre == (1 << i)) {
+		if (best_pre == (1UL << i)) {
 			best_pre = i;
 			break;
 		}
@@ -341,11 +330,6 @@ static int bus_i2c_set_bus_speed(struct lpi2c_bus *i2c_bus, int speed)
 
 	return 0;
 }
-#else
-static int bus_i2c_set_bus_speed(struct lpi2c_bus *i2c_bus, int speed) {
-	return 0;
-}
-#endif
 
 static int bus_i2c_init(struct lpi2c_bus *i2c_bus, int speed)
 {
