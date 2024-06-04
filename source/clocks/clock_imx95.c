@@ -17,6 +17,7 @@ struct imx95_ccm_clk_root_cfg {
 
 static struct imx95_ccm_clk_root_cfg clk_root_cfgs[] = {
 	{ DRAM_APB_CLK_ROOT, SYS_PLL_PFD1_DIV2, 3 }, /* 400MHz / 3 = 133.(3) MHz */
+	{ LPI2C1_CLK_ROOT, OSC_24M_CLK, 1 }, /* 24MHz */
 #ifdef DEBUG
 #if (DEBUG_UART_INSTANCE == 1)
 	{ LPUART1_CLK_ROOT, OSC_24M_CLK, 1}, /* 24MHz */
