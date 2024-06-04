@@ -55,12 +55,19 @@ uint32_t __attribute__((section(".entry"))) oei_entry(void)
 	clock_init();
 	pinmux_config();
 	lpuart32_serial_init();
-	lpi2c_probe_chip(&lpi2c1, 0x52, 0);
+	
+	printf("\n\n** DDR OEI: Booting, commit: %08x **\n", OEI_COMMIT);
+
+	ret = lpi2c_probe_chip(&lpi2c1, 0x52, 0);
+	if (ret)
+		printf("DDR OEI: EEPROM chip probe failed\n");
+	else
+		printf("DDR OEI: EEPROM chip probe success\n");
 
 #ifdef	CONFIG_DDR_QBOOT
-	printf("\n\n** DDR OEI: QuickBoot, commit: %08x **\n", OEI_COMMIT);
+	printf("** DDR OEI: QuickBoot **\n");
 #else
-	printf("\n\n** DDR OEI: Training, commit: %08x **\n", OEI_COMMIT);
+	printf("** DDR OEI: Training **\n");
 #endif
 
 	ret = ddr_init(&dram_timing);
