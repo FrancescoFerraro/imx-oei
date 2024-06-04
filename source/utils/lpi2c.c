@@ -19,8 +19,8 @@
 #endif
 
 #define LPI2C_FIFO_SIZE 4
-#define LPI2C_NACK_TOUT_MS 1
-#define LPI2C_TIMEOUT_MS 100
+#define LPI2C_NACK_TOUT_MS 1*1000
+#define LPI2C_TIMEOUT_MS 100*1000
 
 #ifndef LPI2C_STANDARD_RATE
 	#define LPI2C_STANDARD_RATE 100000
@@ -76,11 +76,8 @@ static int bus_i2c_wait_for_tx_ready(struct lpi2c_reg *regs)
 {
 	lpi2c_status_t result = LPI2C_SUCESS;
 	u32 txcount = 0;
-	/* TODO: Port timeout check routine based on iopoll.h
-	ulong start_time = get_timer(0);
-	*/
-	ulong start_time = 0;
-	(void)start_time;
+	u32 ts, te;
+	ts = timer_get_us();
 
 	do {
 		txcount = LPI2C_MFSR_TXCOUNT(readl(&regs->mfsr));
@@ -90,12 +87,12 @@ static int bus_i2c_wait_for_tx_ready(struct lpi2c_reg *regs)
 			debug("i2c: wait for tx ready: result 0x%x\n", result);
 			return result;
 		}
-		/* TODO: Port timeout check routine based on iopoll.h
-		if (get_timer(start_time) > LPI2C_TIMEOUT_MS) {
+
+		te = timer_get_us() - ts;
+		if (te > LPI2C_TIMEOUT_MS) {
 			debug("i2c: wait for tx ready: timeout\n");
 			return -1;
-		} 
-		*/
+		}
 	} while (!txcount);
 
 	return result;
@@ -127,11 +124,8 @@ static int bus_i2c_receive(struct lpi2c_bus *i2c_bus, u8 *rxbuf, int len)
 	struct lpi2c_reg *regs = (struct lpi2c_reg *)(i2c_bus->base);
 	lpi2c_status_t result = LPI2C_SUCESS;
 	u32 val;
-	/* TODO: Port timeout check routine based on iopoll.h
-	ulong start_time = get_timer(0);
-	*/
-	ulong start_time = 0;
-	(void)start_time;
+	u32 ts, te;
+	ts = timer_get_us();
 
 	/* empty read */
 	if (!len)
@@ -157,11 +151,12 @@ static int bus_i2c_receive(struct lpi2c_bus *i2c_bus, u8 *rxbuf, int len)
 				      result);
 				return result;
 			}
-			/* TODO: Port timeout check routine based on iopoll.h
-			if (get_timer(start_time) > LPI2C_TIMEOUT_MS) {
+
+			te = timer_get_us() - ts;
+			if (te > LPI2C_TIMEOUT_MS) {
 				debug("i2c: receive mrdr: timeout\n");
 				return -1;
-			} */
+			}
 			val = readl(&regs->mrdr);
 		} while (val & LPI2C_MRDR_RXEMPTY_MASK);
 		*rxbuf++ = LPI2C_MRDR_DATA(val);
@@ -211,7 +206,7 @@ static int bus_i2c_stop(struct lpi2c_bus *i2c_bus)
 	lpi2c_status_t result;
 	struct lpi2c_reg *regs = (struct lpi2c_reg *)(i2c_bus->base);
 	u32 status;
-	ulong start_time;
+	u32 ts, te;
 
 	result = bus_i2c_wait_for_tx_ready(regs);
 	if (result) {
@@ -221,11 +216,7 @@ static int bus_i2c_stop(struct lpi2c_bus *i2c_bus)
 
 	/* send stop command */
 	writel(LPI2C_MTDR_CMD(0x2), &regs->mtdr);
-	/* TODO: Port timeout
-	start_time = get_timer(0);
-	*/
-	start_time = 0;
-	(void)start_time;
+	ts = timer_get_us();
 	
 	while (1) {
 		status = readl(&regs->msr);
@@ -237,12 +228,11 @@ static int bus_i2c_stop(struct lpi2c_bus *i2c_bus)
 			writel(status, &regs->msr);
 			break;
 		}
-		/* TODO: port timout 
-		if (get_timer(start_time) > LPI2C_NACK_TOUT_MS) {
+		te = timer_get_us() - ts;
+		if (te > LPI2C_NACK_TOUT_MS) {
 			debug("stop timeout\n");
 			return -ETIMEDOUT;
 		}
-		*/
 	}
 
 	return result;
