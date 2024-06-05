@@ -271,7 +271,7 @@ __attribute__((weak)) u32 imx_get_i2cclk(u32 i2c_num)
 	return 0;
 }
 
-static int bus_i2c_set_bus_speed(struct lpi2c_bus *i2c_bus, int speed)
+static int bus_i2c_set_bus_speed(struct lpi2c_bus *i2c_bus, u32 speed)
 {
 	struct lpi2c_reg *regs = (struct lpi2c_reg *)(i2c_bus->base);
 	u32 val;
@@ -299,7 +299,7 @@ static int bus_i2c_set_bus_speed(struct lpi2c_bus *i2c_bus, int speed)
 			else
 				rate = (clock_rate / preescale / (3 * clkhi + 2 + 2 / preescale));
 
-			abs_error = (u32)speed > rate ? (u32)speed - rate : rate - (u32)speed;
+			abs_error = speed > rate ? speed - rate : rate - speed;
 
 			if (abs_error < error) {
 				best_pre = preescale;
