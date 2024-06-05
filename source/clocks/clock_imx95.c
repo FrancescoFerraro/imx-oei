@@ -39,3 +39,9 @@ int clock_init(void)
 
 	return 0;
 }
+
+u32 imx_get_i2cclk(u32 i2c_num)
+{
+	(void)i2c_num;
+	return MHZ(24);
+}

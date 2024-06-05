@@ -266,6 +266,11 @@ static int bus_i2c_write(struct lpi2c_bus *i2c_bus, u32 chip, u8 *buf, int len)
 	return result;
 }
 
+__attribute__((weak)) u32 imx_get_i2cclk(u32 i2c_num)
+{
+	return 0;
+}
+
 static int bus_i2c_set_bus_speed(struct lpi2c_bus *i2c_bus, int speed)
 {
 	struct lpi2c_reg *regs = (struct lpi2c_reg *)(i2c_bus->base);
@@ -277,7 +282,9 @@ static int bus_i2c_set_bus_speed(struct lpi2c_bus *i2c_bus, int speed)
 	bool mode;
 	u32 i;
 
-	clock_rate = MHZ(24);
+	clock_rate = imx_get_i2cclk(i2c_bus->index);
+	if (!clock_rate)
+		return -EPERM;
 
 	mode = (readl(&regs->mcr) & LPI2C_MCR_MEN_MASK) >> LPI2C_MCR_MEN_SHIFT;
 	/* disable master mode */
