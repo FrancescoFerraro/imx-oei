@@ -266,7 +266,7 @@ static int bus_i2c_write(struct lpi2c_bus *i2c_bus, u32 chip, u8 *buf, int len)
 	return result;
 }
 
-__attribute__((weak)) u32 imx_get_i2cclk(u32 i2c_num)
+u32 __attribute__((weak)) imx_get_i2cclk(u32 i2c_num)
 {
 	return 0;
 }
