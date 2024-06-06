@@ -8,16 +8,10 @@
 #include <time.h>
 #include "oei.h"
 #include "debug.h"
+#include "i2c.h"
 #include "lpuart.h"
-#include "lpi2c.h"
 #include "pinmux.h"
 #include "build_info.h"
-
-static struct lpi2c_bus lpi2c1 = {
-	.index = 1,
-	.base = (void *)LPI2C1_RBASE,
-	.speed = 100000,
-};
 
 #ifdef  DDR_MEM_TEST
 #define DDR_MEM_BASE	0x80000000
@@ -49,20 +43,69 @@ uint32_t __attribute__((section(".entry"))) oei_entry(void)
 #ifdef DDR_MEM_TEST
 	int fail = 0;
 #endif
+	u8 eeprom_buf[10];
+
+	struct lpi2c_bus lpi2c1 =
+	{
+		.index = 1,
+		.base = LPI2C1_RBASE,
+		.speed = 100000,
+	};
+
+	struct i2c_chip eeprom =
+	{
+		.chip_addr = 0x52,
+		.offset_len = 1,
+		.flags = 0,
+		.chip_addr_offset_mask = 0xff,
+		.i2c_bus = &lpi2c1,
+	};
+
 	if (!timer_is_enabled())
 		timer_enable();
 
 	clock_init();
 	pinmux_config();
 	lpuart32_serial_init();
-	
-	printf("\n\n** DDR OEI: Booting, commit: %08x **\n", OEI_COMMIT);
 
-	ret = lpi2c_probe_chip(&lpi2c1, 0x52, 0);
+	printf("\n\n** DDR OEI: Booting, commit: %08x **\n", OEI_COMMIT);
+	/* preset eeprom_buf */
+	for (u32 i = 0; i < sizeof(eeprom_buf); i++)
+		eeprom_buf[i] = (u8)i;
+
+	/* print eeprom_buf content before */
+	printf("DDR OEI: EEPROM buffer content to write: ");
+	for (u32 i = 0; i < sizeof(eeprom_buf); i++)
+		printf("%02x ", eeprom_buf[i]);
+	printf("\n");
+	ret = i2c_init(&lpi2c1, I2C_SPEED_STANDARD_RATE);
+	if (ret)
+		printf("DDR OEI: I2C bus init failed\n");
+	else
+		printf("DDR OEI: I2C bus init success\n");
+
+	ret = i2c_probe_chip(&lpi2c1, 0x52, 0);
 	if (ret)
 		printf("DDR OEI: EEPROM chip probe failed\n");
 	else
 		printf("DDR OEI: EEPROM chip probe success\n");
+
+	ret = i2c_write(&eeprom, 0, (uint8_t *)&eeprom_buf, sizeof(eeprom_buf));
+	if (ret)
+		printf("DDR OEI: EEPROM write failed\n");
+	else
+		printf("DDR OEI: EEPROM write success\n");
+
+	ret = i2c_read(&eeprom, 0, (uint8_t *)&eeprom_buf, sizeof(eeprom_buf));
+	if (ret)
+		printf("DDR OEI: EEPROM read failed\n");
+	else
+		printf("DDR OEI: EEPROM read success\n");
+
+	printf("DDR OEI: EEPROM readback: ");
+	for (u32 i = 0; i < sizeof(eeprom_buf); i++)
+		printf("%02x ", eeprom_buf[i]);
+	printf("\n");
 
 #ifdef	CONFIG_DDR_QBOOT
 	printf("** DDR OEI: QuickBoot **\n");
