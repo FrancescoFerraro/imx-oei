@@ -7,14 +7,8 @@
 
 struct lpi2c_bus {
 	int index;
-	void *base;
-	/* ulong driver_data; */
+	unsigned int base;
 	int speed;
-        /* PinMux and CLK are served somehwere else */
-	/* struct i2c_pads_info *pads_info;*/
-	/* struct udevice *bus; */
-	/* struct clk per_clk; */
-	/* struct clk ipg_clk; */
 };
 
 struct lpi2c_reg {
