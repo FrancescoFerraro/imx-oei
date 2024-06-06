@@ -9,6 +9,7 @@
 #include <asm/io.h>
 #include <asm/types.h>
 #include "debug.h"
+#include "i2c.h"
 #include "lpi2c.h"
 #include "iopoll.h"
 
@@ -373,11 +374,15 @@ static int bus_i2c_init(struct lpi2c_bus *i2c_bus, int speed)
 	return ret;
 }
 
+int lpi2c_init(struct lpi2c_bus *i2c_bus)
+{
+	return bus_i2c_init(i2c_bus, i2c_bus->speed);
+}
+
 int lpi2c_probe_chip(struct lpi2c_bus *i2c_bus, u32 chip, u32 chip_flags)
 {
 	lpi2c_status_t result;
 
-	bus_i2c_init(i2c_bus, i2c_bus->speed);
 	result = bus_i2c_start(i2c_bus, chip, 0);
 	if (result) {
 		bus_i2c_stop(i2c_bus);
@@ -390,6 +395,11 @@ int lpi2c_probe_chip(struct lpi2c_bus *i2c_bus, u32 chip, u32 chip_flags)
 		bus_i2c_init(i2c_bus, LPI2C_STANDARD_RATE);
 
 	return result;
+}
+
+int lpi2c_set_bus_speed(struct lpi2c_bus *i2c_bus, unsigned int speed)
+{
+	return bus_i2c_set_bus_speed(i2c_bus, speed);
 }
 
 int lpi2c_xfer(struct lpi2c_bus *i2c_bus, struct i2c_msg *msg, int nmsgs)

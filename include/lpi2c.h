@@ -510,36 +510,11 @@ typedef enum lpi2c_status {
 #define LPI2C_SRDR_SOF_SHIFT                     (15U)
 #define LPI2C_SRDR_SOF(x)                        (((uint32_t)(((uint32_t)(x)) << LPI2C_SRDR_SOF_SHIFT)) & LPI2C_SRDR_SOF_MASK)
 
-/**
- * struct i2c_msg - an I2C message
- *
- * @addr:	Slave address
- * @flags:	Flags (see enum dm_i2c_msg_flags)
- * @len:	Length of buffer in bytes, may be 0 for a probe
- * @buf:	Buffer to send/receive, or NULL if no data
- */
-struct i2c_msg {
-	u32 addr;
-	u32 flags;
-	u32 len;
-	u8 *buf;
-};
+struct i2c_msg;
 
-/*
- * Not all of these flags are implemented in the U-Boot API
- */
-enum dm_i2c_msg_flags {
-	I2C_M_TEN		= 0x0010, /* ten-bit chip address */
-	I2C_M_RD		= 0x0001, /* read data, from slave to master */
-	I2C_M_STOP		= 0x8000, /* send stop after this message */
-	I2C_M_NOSTART		= 0x4000, /* no start before this message */
-	I2C_M_REV_DIR_ADDR	= 0x2000, /* invert polarity of R/W bit */
-	I2C_M_IGNORE_NAK	= 0x1000, /* continue after NAK */
-	I2C_M_NO_RD_ACK		= 0x0800, /* skip the Ack bit on reads */
-	I2C_M_RECV_LEN		= 0x0400, /* length is first received byte */
-};
-
+int lpi2c_init(struct lpi2c_bus *i2c_bus);
 int lpi2c_probe_chip(struct lpi2c_bus *i2c_bus, u32 chip, u32 chip_flags);
+int lpi2c_set_bus_speed(struct lpi2c_bus *i2c_bus, unsigned int speed);
 int lpi2c_xfer(struct lpi2c_bus *i2c_bus, struct i2c_msg *msg, int nmsgs);
 
 #endif /* _LPI2C_H */

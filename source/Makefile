@@ -15,7 +15,8 @@ OBJS += \
 	$(OUT)/pinmux.o \
 	$(OUT)/tiny-printf.o \
 	$(OUT)/lpuart.o \
-	$(OUT)/lpi2c.o
+	$(OUT)/lpi2c.o \
+	$(OUT)/i2c.o
 endif
 
 INCLUDE += -Iinclude
