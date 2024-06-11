@@ -6,9 +6,11 @@
 /**
  * M33 Code TCM (TCML) Free Space: 0x1FFC0000 - 0x1FFFFFFF - according to RM
  * M33 Sys  TCM (TCMU) Free Space: 0x30000000 - 0x3002DFFF - according to CM33 ROM
+ * System   OCRAM      Free Space: 0x30480000 - 0x304D7FFF - according to RM
  */
 MEMORY {
-	s_code (rx) : ORIGIN = 0x1FFC0000, LENGTH = 0x00040000
+	s_code (rx) : ORIGIN = 0x1FFC0000, LENGTH = 0x00040000 /* 256 KB */
+	s_data (rw) : ORIGIN = 0x30480000, LENGTH = 0x00020000 /* 128 KB */
 }
 
 OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
@@ -30,6 +32,22 @@ SECTIONS
 	.data : {
 		. = ALIGN(4);
 		*(.data*)
+	} > s_code
+
+	__ramdata_rom_start__ = .;
+	.ramdata : AT(__ramdata_rom_start__) {
+		. = ALIGN(4);
+		__ramdata_start__ = .;
+		*(.ramdata*)
+		. = ALIGN(4);
+		__ramdata_end__ = .;
+	} > s_data
+	__ramdata_rom_end__ =  __ramdata_rom_start__ + (__ramdata_end__ - __ramdata_start__);
+
+	/* . = __ramdata_rom_start__ + SIZEOF(.ramdata); */
+	.dummy : {
+		. = ALIGN(4);
+		. += SIZEOF(.ramdata);
 	} > s_code
 
 	.end : {

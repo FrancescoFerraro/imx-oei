@@ -8,6 +8,28 @@
 
 static char _end[0] __attribute__((section(".__end")));
 
+extern u32 __ramdata_rom_start__;
+extern u32 __ramdata_rom_end__;
+
+#define __RAMDATA_START		0x30480000 /* TODO: Use linker script for it */
+void __attribute__((weak)) __init_ramdata_section(void)
+{
+	u32 *src = &__ramdata_rom_start__;
+	u32 *dst = (u32*)__RAMDATA_START;
+	while (src < &__ramdata_rom_end__) {
+		*dst++ = *src++;
+	}
+}
+
+void __attribute__((weak)) __deinit_ramdata_section(void)
+{
+	u32 *src = &__ramdata_rom_start__;
+	u32 *dst = (u32*)__RAMDATA_START;
+	while (src < &__ramdata_rom_end__) {
+		*dst++ = 0UL;
+	}
+}
+
 #if !defined(CONFIG_DDR_QBOOT)
 static void check_cfg_id(struct dram_fsp_msg *fsp_msg, u32 reg, u32 *cfg_id, u16 *val)
 {
