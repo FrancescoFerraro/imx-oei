@@ -16,7 +16,7 @@
 #ifdef DEBUG
 #define debug(fmt, args...) do { printf(fmt, ##args); } while (0)
 #else
-#define debug(fmt, args...) do {} while (0)
+#define debug(fmt, args...)
 #endif
 
 #define LPI2C_FIFO_SIZE 4
