@@ -5,6 +5,7 @@ OBJS += \
 	$(OUT)/main.o \
 	$(OUT)/ddr_init.o \
 	$(OUT)/ddrphy_utils.o \
+	$(OUT)/eeprom.o \
 	$(OUT)/helper.o \
 	$(OUT)/crc.o
 
