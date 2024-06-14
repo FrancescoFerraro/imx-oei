@@ -11,7 +11,7 @@ static char _end[0] __attribute__((section(".__end")));
 extern u32 __ramdata_rom_start__;
 extern u32 __ramdata_rom_end__;
 
-#define __RAMDATA_START		0x30480000 /* TODO: Use linker script for it */
+#define __RAMDATA_START		0x30000000 /* TODO: Use linker script variable */
 void __attribute__((weak)) __init_ramdata_section(void)
 {
 	u32 *src = &__ramdata_rom_start__;

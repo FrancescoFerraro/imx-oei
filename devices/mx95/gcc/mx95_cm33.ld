@@ -10,7 +10,7 @@
  */
 MEMORY {
 	s_code (rx) : ORIGIN = 0x1FFC0000, LENGTH = 0x00040000 /* 256 KB */
-	s_data (rw) : ORIGIN = 0x30480000, LENGTH = 0x00020000 /* 128 KB */
+	s_data (rw) : ORIGIN = 0x30000000, LENGTH = 0x0002E000 /* 184 KB */
 }
 
 OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
