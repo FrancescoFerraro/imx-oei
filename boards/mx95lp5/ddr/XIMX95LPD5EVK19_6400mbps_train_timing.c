@@ -9,7 +9,7 @@
 #include "ddr.h"
 
 /* Initialize DDRC registers */
-static struct ddrc_cfg_param ddr_ddrc_cfg[] = {
+static struct ddrc_cfg_param __attribute__((section(".ramdata"))) ddr_ddrc_cfg[] = {
     {0x5e080110, 0x41084001},
     {0x5e080000, 0x1ff},
     {0x5e080008, 0x0},
@@ -49,7 +49,7 @@ static struct ddrc_cfg_param ddr_ddrc_cfg[] = {
 };
 
 /* DRAM fsp configurations */
-static struct ddrc_cfg_param ddr_dram_fsp0_ddrc_cfg[] = {
+static struct ddrc_cfg_param __attribute__((section(".ramdata"))) ddr_dram_fsp0_ddrc_cfg[] = {
     {0x5e080100, 0x020D2100},
     {0x5e080104, 0x4866000C},
     {0x5e080108, 0xF2F08C45},
@@ -71,7 +71,7 @@ static struct ddrc_cfg_param ddr_dram_fsp0_ddrc_cfg[] = {
 };
 
 /* PHY Initialize Configuration */
-static struct ddrphy_cfg_param ddr_ddrphy_cfg[] = {
+static struct ddrphy_cfg_param __attribute__((section(".ramdata"))) ddr_ddrphy_cfg[] = {
     {0x10080, 0x3},
     {0x10081, 0x2},
     {0x10082, 0x5},
@@ -162,7 +162,7 @@ static struct ddrphy_cfg_param ddr_ddrphy_cfg[] = {
 };
 
 /* PHY trained csr */
-static struct ddrphy_cfg_param ddr_ddrphy_trained_csr[] = {
+static struct ddrphy_cfg_param __attribute__((section(".ramdata"))) ddr_ddrphy_trained_csr[] = {
     {0x200a5, 0x0},
     {0xd0036, 0x0},
     {0x200bd, 0x0},
@@ -5885,7 +5885,7 @@ static struct ddrphy_cfg_param ddr_ddrphy_trained_csr[] = {
 };
 
 /* PHY Initialize Configuration for Pstate 0 */
-static struct ddrphy_cfg_param ddr_phy_fsp0_cfg[] = {
+static struct ddrphy_cfg_param __attribute__((section(".ramdata"))) ddr_phy_fsp0_cfg[] = {
     {0x90802, 0x1},
     {0x2004a, 0x601},
     {0x2004b, 0x1c3e},
@@ -6278,7 +6278,7 @@ static struct ddrphy_cfg_param ddr_phy_fsp0_cfg[] = {
 };
 
 /* P0 message block parameter for training firmware */
-static struct ddrphy_cfg_param ddr_phy_msgh_fsp0_cfg[] = {
+static struct ddrphy_cfg_param __attribute__((section(".ramdata"))) ddr_phy_msgh_fsp0_cfg[] = {
     {0x58000, 0x4000},
     {0x58002, 0x30},
     {0x58003, 0x1900},
@@ -6329,7 +6329,7 @@ static struct ddrphy_cfg_param ddr_phy_msgh_fsp0_cfg[] = {
 };
 
 /* DRAM PHY init engine image for Pstate 0 */
-static struct ddrphy_cfg_param ddr_phy_pie_fsp0_cfg[] = {
+static struct ddrphy_cfg_param __attribute__((section(".ramdata"))) ddr_phy_pie_fsp0_cfg[] = {
     {0x908f0, 0x65},
     {0x908f1, 0x258},
     {0x908f2, 0x0},
@@ -6552,7 +6552,7 @@ static struct ddrphy_cfg_param ddr_phy_pie_fsp0_cfg[] = {
 };
 
 /* DRAM PHY init engine image */
-static struct ddrphy_cfg_param ddr_phy_pie[] = {
+static struct ddrphy_cfg_param __attribute__((section(".ramdata"))) ddr_phy_pie[] = {
     {0x41000, 0x0},
     {0x41001, 0x0},
     {0x41002, 0x0},
@@ -10626,7 +10626,7 @@ static struct ddrphy_cfg_param ddr_phy_pie[] = {
     {0xd0003, 0x0},
 };
 
-static struct dram_fsp_msg ddr_dram_fsp_msg[] = {
+static struct dram_fsp_msg __attribute__((section(".ramdata"))) ddr_dram_fsp_msg[] = {
     {
         /* P0 6400mbps */
         .drate = 6400,
