@@ -16,7 +16,7 @@ OBJS += \
 ifeq ($(DEBUG), 1)
 OBJS += \
 	$(OUT)/tiny-printf.o \
-	$(OUT)/lpuart.o \
+	$(OUT)/lpuart.o
 endif
 
 INCLUDE += -Iinclude
