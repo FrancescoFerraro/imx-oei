@@ -10,7 +10,12 @@
 #include "debug.h"
 #include "lpuart.h"
 #include "pinmux.h"
+#include "eeprom.h"
 #include "build_info.h"
+
+extern void __init_ramdata_section(void);
+
+static struct var_eeprom __attribute__((section(".ramdata"))) var_eeprom;
 
 #ifdef  DDR_MEM_TEST
 #define DDR_MEM_BASE	0x80000000
@@ -42,6 +47,8 @@ uint32_t __attribute__((section(".entry"))) oei_entry(void)
 #ifdef DDR_MEM_TEST
 	int fail = 0;
 #endif
+	__init_ramdata_section();
+
 	if (!timer_is_enabled())
 		timer_enable();
 
@@ -56,6 +63,15 @@ uint32_t __attribute__((section(".entry"))) oei_entry(void)
 #else
 	printf("** DDR OEI: Training **\n");
 #endif
+
+	ret = var_eeprom_read_header(&var_eeprom);
+	if (ret) {
+		printf("** DDR OEI: EEPROM read failed **\n");
+		return OEI_FAIL;
+	}
+
+	var_eeprom_print_prod_info(&var_eeprom);
+	var_eeprom_adjust_dram(&var_eeprom, &dram_timing);
 
 	ret = ddr_init(&dram_timing);
 
