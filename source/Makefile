@@ -8,15 +8,15 @@ OBJS += \
 	$(OUT)/time-cm33.o \
 	$(OUT)/clock_imx95.o \
 	$(OUT)/clock_root.o \
-	$(OUT)/clock_common.o
+	$(OUT)/clock_common.o \
+	$(OUT)/pinmux.o \
+	$(OUT)/lpi2c.o \
+	$(OUT)/i2c.o
 
 ifeq ($(DEBUG), 1)
 OBJS += \
-	$(OUT)/pinmux.o \
 	$(OUT)/tiny-printf.o \
 	$(OUT)/lpuart.o \
-	$(OUT)/lpi2c.o \
-	$(OUT)/i2c.o
 endif
 
 INCLUDE += -Iinclude
