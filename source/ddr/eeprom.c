@@ -15,7 +15,7 @@
 #ifdef DEBUG
 #define debug(fmt, args...) do { printf(fmt, ##args); } while (0)
 #else
-#define debug(fmt, args...)
+#define debug(fmt, args...) do {} while (0)
 #endif
 
 static struct lpi2c_bus __attribute__((section(".ramdata"))) lpi2c =

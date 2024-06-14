@@ -9,7 +9,7 @@
 int printf(const char *fmt, ...);
 void putc(const char c);
 #else
-#define printf(...)
-#define putc(...)
+#define printf(...) do {} while (0)
+#define putc(...) do {} while (0)
 #endif
 #endif
