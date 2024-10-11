@@ -1,9 +1,9 @@
 /*
  * Copyright 2023-2024 NXP
  *
- * SPDX-License-Identifier: GPL-2.0+
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- * Code generated with DDR Tool v3.3.0_5.9.
+ * Code generated with DDR Tool v3.4.0_6.8-e3369a1a.
  * DDR PHY FW2023.11
  */
 
@@ -28,7 +28,7 @@ static struct ddrc_cfg_param ddr_ddrc_cfg[] = {
     {0x5e08026c, 0x1004},
     {0x5e080f00, 0x8},
     {0x5e080f04, 0x0},
-    {0x5e080800, 0x43b31002},
+    {0x5e080800, 0x43931002},
     {0x5e080804, 0x3f1f1f1f},
     {0x5e081000, 0x0},
     {0x5e081220, 0x0},
@@ -55,17 +55,17 @@ static struct ddrc_cfg_param ddr_dram_fsp0_ddrc_cfg[] = {
     {0x5e080104, 0x4866000C},
     {0x5e080108, 0xF2F08C45},
     {0x5e08010C, 0x20488010},
-    {0x5e080124, 0x0C35030D},
+    {0x5e080124, 0x0C34030D},
     {0x5e080160, 0x00000101},
     {0x5e08016C, 0x01300000},
-    {0x5e080170, 0x8B0B0509},
+    {0x5e080170, 0x8B010509},
     {0x5e080250, 0x00110A11},
     {0x5e080254, 0x00680040},
     {0x5e080258, 0x03003E80},
     {0x5e08025C, 0x40520200},
     {0x5e080300, 0x08120808},
     {0x5e080304, 0x00680E03},
-    {0x5e080308, 0x0604061B},
+    {0x5e080308, 0x0604061A},
     {0x5e08030C, 0x0030000A},
     {0x5e080310, 0x20610000},
     {0x5e080314, 0x0A0A0407},
@@ -6342,7 +6342,7 @@ static struct ddrphy_cfg_param ddr_phy_msgh_fsp0_cfg[] = {
     {0x58004, 0x4},
     {0x58005, 0x4},
     {0x58008, 0x17df},
-    {0x58009, 0xff},
+    {0x58009, 0xc8},
     {0x5800b, 0x2},
     {0x5800d, 0x100},
     {0x58012, 0x310},
@@ -6358,8 +6358,8 @@ static struct ddrphy_cfg_param ddr_phy_msgh_fsp0_cfg[] = {
     {0x58034, 0x5454},
     {0x58035, 0x4646},
     {0x58036, 0x4646},
-    {0x58037, 0x2424},
-    {0x58038, 0x2424},
+    {0x58037, 0x2d2d},
+    {0x58038, 0x2d2d},
     {0x58039, 0x8080},
     {0x5803a, 0x8080},
     {0x5803b, 0x1c1c},
@@ -10735,3 +10735,4 @@ struct dram_timing_info dram_timing = {
     .fsp_cfg = ddr_dram_fsp_cfg,
     .fsp_cfg_num = ARRAY_SIZE(ddr_dram_fsp_cfg),
 };
+
